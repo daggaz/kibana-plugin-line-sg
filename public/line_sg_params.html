@@ -199,5 +199,25 @@
             </div>
     </div>
   </li>
+  <li>
+    <input type="checkbox" class="accordion" checked>
+    <i></i>
+    <h4>Trendline</h4>
+    <div class="opt-group">
+      Enable &nbsp;<input type="checkbox" ng-model="vis.params.configLine.trendline">
+      <div class="form-group">
+        <label>limit 1:</label>
+          <input type="text" ng-model="vis.params.configLine.trendlinelimit1" class="form-control"/>
+      </div>
+      <div class="form-group">
+        <label>limit 2:</label>
+          <input type="text" ng-model="vis.params.configLine.trendlinelimit2" class="form-control"/>
+      </div>
+      <div class="form-group">
+        <label>forcast (absolute or percent):</label>
+          <input type="text" ng-model="vis.params.configLine.trendlineforecast" class="form-control"/>
+     </div>
+    </div>
+  </li>
 
 </ul>

@@ -17,9 +17,9 @@ define(function (require) {
     // Vis object of this type.
     return new TemplateVisType({
       name: 'line-sg',
-      title: 'Line-sg',
-      description: 'This plugin allows the creation of a view with several types of graphics on Kibana Version 4.2.2, 4.3.0, 4.4.0, 4.5.0',
-      icon: 'fa-diamond',
+      title: 'Graphz',
+      description: 'Graphz',
+      icon: 'fa-star',
       template: require('plugins/line_sg/line_sg.html'),
       params: {
         defaults: {

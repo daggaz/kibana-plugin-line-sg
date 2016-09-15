@@ -42,6 +42,62 @@ define(function (require) {
 	console.log("----chart generator----");
         idchart = $element.children().find(".chartc3");
         var config = {};
+
+	var generateTrendline = $scope.vis.params.configLine.trendline;
+	if (generateTrendline) {
+		var n = metrics[0].length-1;
+                var start = metrics[0][1];
+                var end = metrics[0][n];
+                var range = end - start;
+		var a = 0;
+		var x_sum = 0;
+		var y_sum = 0;
+		var c = 0;
+		for (var i = 1; i < n+1; i++) {
+			a += i*metrics[1][i];
+			x_sum += i;
+			y_sum += metrics[1][i];
+			c += i*i;	
+		}
+		a = a*n;
+		var b = x_sum*y_sum;
+		c = c*n;
+		var d = x_sum*x_sum;
+		var slope = (a-b)/(c-d);
+		var intercept = (y_sum - slope*x_sum)/n;
+                
+                var forecast = $scope.vis.params.configLine.trendlineforecast;
+                if (forecast) {
+                    var forecastEnd;
+                    if (forecast.slice(-1) == '%') {
+                        var forecastPercent = parseInt(forecast)/100;
+                        forecastEnd = end + (forecastPercent * range);
+                    } else {
+                        forecastEnd = end + parseInt(forecast);
+                    }
+                    if (forecastEnd) {
+                        n++;
+                        metrics[0][n] = forecastEnd;
+                        metrics[1][n] = null;
+                    }
+                }
+
+		config.line = {connectNull: true};
+                function createLine(label, y1, y2) {
+		    var line = [label];
+                    for (var z = 2; z < n+1; z++)
+                        line[z] = null;
+                    line[1] = y1;
+                    line[n] = y2;                                                 
+                    return line;
+                }
+		metrics.push(createLine('Trend', slope + intercept, (slope * n) + intercept));
+                if ($scope.vis.params.configLine.trendlinelimit1)
+                    metrics.push(createLine('Limit 1', $scope.vis.params.configLine.trendlinelimit1, $scope.vis.params.configLine.trendlinelimit1));
+                if ($scope.vis.params.configLine.trendlinelimit2)
+                    metrics.push(createLine('Limit 2', $scope.vis.params.configLine.trendlinelimit2, $scope.vis.params.configLine.trendlinelimit2));
+	}
+
         config.bindto = idchart[0];
         config.data = {};
         config.data.x = 'data0'; 
